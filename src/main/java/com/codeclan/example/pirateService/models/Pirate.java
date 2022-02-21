@@ -1,6 +1,7 @@
 package com.codeclan.example.pirateService.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 
 @Entity
 @Table(name="pirates")
@@ -25,11 +26,27 @@ public class Pirate {
     @JoinColumn(name="ship_id", nullable=false)
     private Ship ship;
 
+    @ManyToMany
+    @JoinTable(name="pirates_raids",
+    joinColumns = {@JoinColumn(
+            name = "pirate_id",
+            nullable = false,
+            updatable = false)
+        },
+        inverseJoinColumns = { @JoinColumn(
+            name = "raid_id",
+            nullable = false,
+            updatable = false)
+        }
+    )
+    private ArrayList<Raid> raids;
+
     public Pirate(String firstName, String lastName, int age, Ship ship) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.ship = ship;
+        this.raids = new ArrayList<Raid>();
     }
 
     public Pirate() {}
@@ -74,4 +91,15 @@ public class Pirate {
         this.ship = ship;
     }
 
+    public ArrayList<Raid> getRaids() {
+        return raids;
+    }
+
+    public void setRaids(ArrayList<Raid> raids) {
+        this.raids = raids;
+    }
+
+    public void addRaid(Raid raid){
+        this.raids.add(raid);
+    }
 }

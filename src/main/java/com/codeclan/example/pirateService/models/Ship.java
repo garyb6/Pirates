@@ -1,9 +1,8 @@
 package com.codeclan.example.pirateService.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 
 @Entity
@@ -11,12 +10,15 @@ import java.util.ArrayList;
 
 public class Ship {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @Column (name = "name")
     private String name;
 
+    @JsonIgnoreProperties({"ship"})
     @OneToMany(mappedBy = "ship")
     @Column (name = "pirates_on_board")
     private ArrayList<Pirate> pirates;
