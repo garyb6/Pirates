@@ -1,27 +1,29 @@
 package com.codeclan.example.pirateService.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="raids")
-
+@Table(name = "raids")
 public class Raid {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "location")
     private String location;
 
-    @Column(name="loot")
-    private String loot;
-
+    @Column(name = "loot")
+    private int loot;
 
     @ManyToMany
+    @JsonIgnoreProperties({"raids"})
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinTable(
             name = "pirates_raids",
             joinColumns = { @JoinColumn(
@@ -34,22 +36,15 @@ public class Raid {
                     nullable = false,
                     updatable = false)
             })
-    private ArrayList<Pirate> pirates;
+    private List<Pirate> pirates;
 
-    public Raid(String location, String loot) {
+    public Raid(String location, int loot) {
         this.location = location;
         this.loot = loot;
-        this.pirates = new ArrayList<Pirate>();
+        this.pirates = new ArrayList<>();
     }
 
-    public Raid(){}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public Raid() {
     }
 
     public String getLocation() {
@@ -60,20 +55,20 @@ public class Raid {
         this.location = location;
     }
 
-    public String getLoot() {
+    public int getLoot() {
         return loot;
     }
 
-    public void setLoot(String loot) {
+    public void setLoot(int loot) {
         this.loot = loot;
     }
 
-    public ArrayList<Pirate> getPirates() {
-        return pirates;
+    public Long getId() {
+        return id;
     }
 
-    public void setPirates(ArrayList<Pirate> pirates) {
-        this.pirates = pirates;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void addPirate(Pirate pirate){
